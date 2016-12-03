@@ -15,7 +15,7 @@ extern "C"{
 using namespace std;
 
 
-string fake = "{\"action\": \"helloack\", \"gameinstance\": {\"gamedef\": {\"extensioncolor\": {\"rows\": 6, \"columns\": 6, \"data\": [0, 3, 1, 2, 2, 1, 0, 1, 3, 0, 0, 3, 1, 3, 2, 0, 1, 2, 3, 3, 3, 3, 0, 0, 0, 3, 1, 0, 1, 0, 1, 1, 3, 3, 3, 2]}, \"boardstate\": {\"rows\": 6, \"columns\": 6, \"data\": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}, \"movesallowed\": 24, \"gameid\": 66, \"colors\": 4}, \"gamestate\": {\"movesmade\": 0, \"currentscore\": 18, \"extensionoffset\": [12, 22, 11, 13, 8, 7], \"boardcandies\": {\"rows\": 6, \"columns\": 6, \"data\": [{\"color\": 0, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 1, \"type\": 0}]}, \"boardstate\": {\"rows\": 6, \"columns\": 6, \"data\": [1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1]}}}}";
+string fake = "{\"action\": \"fake\", \"gameinstance\": {\"gamedef\": {\"extensioncolor\": {\"rows\": 6, \"columns\": 6, \"data\": [0, 3, 1, 2, 2, 1, 0, 1, 3, 0, 0, 3, 1, 3, 2, 0, 1, 2, 3, 3, 3, 3, 0, 0, 0, 3, 1, 0, 1, 0, 1, 1, 3, 3, 3, 2]}, \"boardstate\": {\"rows\": 6, \"columns\": 6, \"data\": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}, \"movesallowed\": 24, \"gameid\": 66, \"colors\": 4}, \"gamestate\": {\"movesmade\": 0, \"currentscore\": 18, \"extensionoffset\": [12, 22, 11, 13, 8, 7], \"boardcandies\": {\"rows\": 6, \"columns\": 6, \"data\": [{\"color\": 0, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 1, \"type\": 0}]}, \"boardstate\": {\"rows\": 6, \"columns\": 6, \"data\": [1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1]}}}}";
 
 
 string Message_hello  = "hello";
@@ -53,30 +53,35 @@ int main(int argc, char *argv[]) {
     buf[readCount] = '\0';
     cout << "\tFIrst Read '" << buf << "'" << endl;
 
+    json_t * gamedata = json_loads(buf, JSON_COMPACT, NULL);
 
 
-    json_t* gamedata = json_loads(fake.c_str(), JSON_COMPACT ,NULL);
+    //json_t* gamedata = json_loads(fake.c_str(), JSON_COMPACT ,NULL);
     g_def = new gameDef();
     g_state = new gameState();
     deserialize(gamedata);  //loads g_def
-    cout<< "g_def method ----------" << g_def->get_movesAllowed() << endl;
+    cout<< "g_def method (movesallowed)----------" << g_def->get_movesAllowed() << endl;
+    cout<< "g_state method (currentscore)----------" << g_state->get_currScore() << endl;
     //load gamestate
     //apply template compute new g_state
     applyTemplate();
 
-
     //serialize new game_state
-
     serialize();
     //send back
-
     //string sendback = std::string str(serialized_data);
     clientSocket.WrappedWrite(serialized_data,2047);
+    readCount = clientSocket.WrappedRead(buf, 2047);   //need to read out a '' here ** see output
+    cout << "\tRead what am I reading?-------'" << buf << "'" << endl;
 
-    cout << "wrote serialized data" << endl;
+    cout << "last line before while loop --------wrote serialized data---------------------" << endl;
+
+
+
 
     int count = 0;
-    while (ServerSaysBye == false && count < 5){
+    char buff[2048];
+    while (ServerSaysBye == false && count < 2){
       //********WRITE computed gameinstance**********/////
       // jannson functions covert but to json
       // deserialize json object 
@@ -85,36 +90,37 @@ int main(int argc, char *argv[]) {
       // send back to server
       //////////////////////////////////////////////////
       // Array2dPtr arr = NULL;
-      // arr = A2d_AllocateArray2d(3, 3, sizeof(void*));
-      // cout<< "testing if a2d works here, should be 0 ---- " <<A2d_FillArray2d(arr, 100, 100, NULL)<< endl;
 
-      // json_t* st = json_string("jansson is working");
-      // cout << "testing if jasnsson works here -----"<< json_string_value(st) << endl;
 
-      // gameDef* gdef = new gameDef();
-      // cout << &gdef << endl;
+
+
+
 
       cout << "inside while loop" << endl;
 
 
-      clientSocket.WrappedWrite(Message_game.c_str(), Message_game.length());
-      //********WRITE computed gameinstance**********/////
+      readCount = clientSocket.WrappedRead(buff, 2047);
+      buff[readCount] = '\0';
+      cout << "\tRead '" << buff << "'" << endl;
 
-      readCount = clientSocket.WrappedRead(buf, 2048);
-      buf[readCount] = '\0';
-      cout << "\tRead '" << buf << "'" << endl;
-      char* temp = "bye";
-      bool match_bye = 1;
-      for (int i = 0; i < 4; i++){
-        if(buf[i] != temp[i]){
-          cout << buf[i] << " -- " << temp[i] << endl;
-          match_bye = 0;
-        }
-      }
-      if (match_bye == 1){ //received bye from server
-        ServerSaysBye = true;
-        cout << "received bye from server" << endl;
-      }
+      clientSocket.WrappedWrite(fake.c_str(), fake.length());
+ 
+
+
+
+
+      // char* temp = "bye";
+      // bool match_bye = 1;
+      // for (int i = 0; i < 4; i++){
+      //   if(buf[i] != temp[i]){
+      //     cout << buf[i] << " -- " << temp[i] << endl;
+      //     match_bye = 0;
+      //   }
+      // }
+      // if (match_bye == 1){ //received bye from server
+      //   ServerSaysBye = true;
+      //   cout << "received bye from server" << endl;
+      // }
       count ++;  //replace it later
     }
 

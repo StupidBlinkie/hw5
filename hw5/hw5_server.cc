@@ -5,7 +5,7 @@
 #include "ServerSocket.h"
 #include "ClientSocket.h"
 
-#include "../hw4/hw4/hw4_view.h"
+//#include "../hw4/hw4/hw4_view.h"
 //#include "hw4_controller.h"
 extern "C"{
     #include "../jansson/include/jansson.h"
@@ -13,27 +13,83 @@ extern "C"{
 }
 
 using namespace std;
-string fake = "{\"action\": \"helloack\", \"gameinstance\": {\"gamedef\": {\"extensioncolor\": {\"rows\": 6, \"columns\": 6, \"data\": [0, 3, 1, 2, 2, 1, 0, 1, 3, 0, 0, 3, 1, 3, 2, 0, 1, 2, 3, 3, 3, 3, 0, 0, 0, 3, 1, 0, 1, 0, 1, 1, 3, 3, 3, 2]}, \"boardstate\": {\"rows\": 6, \"columns\": 6, \"data\": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}, \"movesallowed\": 24, \"gameid\": 66, \"colors\": 4}, \"gamestate\": {\"movesmade\": 0, \"currentscore\": 18, \"extensionoffset\": [12, 22, 11, 13, 8, 7], \"boardcandies\": {\"rows\": 6, \"columns\": 6, \"data\": [{\"color\": 0, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 1, \"type\": 0}]}, \"boardstate\": {\"rows\": 6, \"columns\": 6, \"data\": [1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1]}}}}";
+string fake = "{\"action\": \"move\" }";
 string Message_game  = "from server: nothing for now";
 string Message_helloack = "helloack";
 
+// GtkWidget *grid;
+// GtkWidget *window;
+
+
+
+// void activate (GtkApplication *app, gpointer user_data) {
+   
+//    window = gtk_application_window_new (app);
+//    gtk_window_set_title (GTK_WINDOW (window), "Window");
+//    gtk_window_set_default_size (GTK_WINDOW (window), 40*6, 40*6);
+//    gtk_container_set_border_width (GTK_CONTAINER (window), 10);
+
+//    grid = gtk_grid_new();
+//    gtk_container_add (GTK_CONTAINER (window), grid);
+
+//    GtkButton *button;
+//    //view_construct_grid();
+   
+
+//    //four control buttons + 1 quit button
+//    button = (GtkButton*) gtk_button_new_with_label (NULL);
+//    gtk_button_set_image(button, gtk_image_new_from_file ("../images/direction/up.png"));
+//    g_signal_connect (button, "clicked", G_CALLBACK (NULL), NULL);
+//    gtk_grid_attach (GTK_GRID (grid), (GtkWidget*) button, 6, 0, 1, 1); // need to fix these parameters
+
+//    button = (GtkButton*) gtk_button_new_with_label (NULL);
+//    gtk_button_set_image(button, gtk_image_new_from_file ("../images/direction/down.png"));
+//    g_signal_connect (button, "clicked", G_CALLBACK (NULL), NULL);
+//    gtk_grid_attach (GTK_GRID (grid),(GtkWidget*)  button, 6, 1, 1, 1);
+
+//    button = (GtkButton*) gtk_button_new_with_label (NULL);
+//    gtk_button_set_image(button, gtk_image_new_from_file ("../images/direction/left.png"));
+//    g_signal_connect (button, "clicked", G_CALLBACK (NULL), NULL);
+//    gtk_grid_attach (GTK_GRID (grid), (GtkWidget*) button, 6, 2, 1, 1);
+
+//    button = (GtkButton*) gtk_button_new_with_label (NULL);
+//    gtk_button_set_image(button, gtk_image_new_from_file ("../images/direction/right.png"));
+//    g_signal_connect (button, "clicked", G_CALLBACK (NULL), NULL);
+//    gtk_grid_attach (GTK_GRID (grid), (GtkWidget*) button, 6, 3, 1, 1);
+
+//    gtk_widget_show_all (window);
+// }
+
+
+
+
+
+
+
+
 void usage(const char *exeName) {
-  cout << "Usage: " << exeName << " [port]" << endl;
-  cout << "  Creates a server socket on port, if given," << endl
-       << "  or on random port, if not." << endl;
+  cout << "Usage: " << exeName << " filename" << endl;
   exit(1);
 }
 
-int main(int argc, char *argv[]) {
 
-  if ( argc != 1 && argc != 2 ) usage(argv[0]);
-  
+char* generate_helloack_message(char* file){
+  json_t* json_from_file = json_load_file(file, JSON_COMPACT, NULL);
+  json_t* json_final = json_object();
+  json_object_set(json_final, "action", json_string("helloack"));
+  json_object_set(json_final, "gameinstance", json_from_file);
+
+  return json_dumps(json_final, NULL); 
+}
+
+
+
+
+
+int main(int argc, char *argv[]) {
+  if ( argc != 2 ) usage(argv[0]);
   int port = 0;
-  try {
-    if ( argc == 2 ) port = stoi(argv[1]);
-  } catch (...) {
-    usage(argv[0]);
-  }
+
 
   try {
     int socketFd;
@@ -68,18 +124,18 @@ int main(int argc, char *argv[]) {
 
     cout << "Reading" << endl;
 
-    char buf[1024];
+    char buf[2048];
     int readCount;
-    bool received_hello = false;
-    bool said_hello = false;
+    //bool received_hello = false;
+    bool said_hello = 0;
 
 
-    while ( readCount = peerSocket.WrappedRead(buf, 1023) ) {
+    //keep reading until gets hello
+    while (said_hello == 0) {
       // write to stdout
+      readCount = peerSocket.WrappedRead(buf, 2047);
       buf[readCount] = '\0'; // make sure buf holds a c style string
       cout << "Got '" << buf << "'" << endl;
-
-
 
       char* temp = "hello";
       bool match_hello = 1;
@@ -88,28 +144,34 @@ int main(int argc, char *argv[]) {
           match_hello = 0;
         }
       }
-
       if (match_hello == 1){
-        //cout << "received hello from client.." << endl;
-        //peerSocket.WrappedWrite("message from server: helloack", 100);
-        said_hello = true;
+        cout << "server says: received hello from client.." << endl;
+        cout << "server says: sending helloack.." << endl;
+        said_hello = 1;
+        match_hello = 0;
+
+        char* helloack_message = generate_helloack_message(argv[1]);
+        peerSocket.WrappedWrite(helloack_message, 2048);  //TO-DO: not safe here if gameboard is large, convert to string then use str.length()?
       } 
       
-      if (said_hello){
-        peerSocket.WrappedWrite(fake.c_str(), fake.length());
-      }
-
-
-
-
-      //if some bool indicates bye, clicking exit button
-      //  peerSocket.WrappedWrite("bye", 100);
-      
-
     } //end of while }
 
 
-    
+    ////////*** following while loop mimics gtk activate() ****////////////////
+    ////////*** and it is working as expected
+
+    //TODO- we put gtk app/ run/ status stuff here, and do reads and writes inside activate
+    //function, and it should work... if activate is called again and again until
+    //gtk app terminates...
+    readCount = 0;
+    char buff[2048];
+    while(readCount = peerSocket.WrappedRead(buff, 2047) ){
+          //readCount = peerSocket.WrappedRead(buff, 2047); 
+          buff[readCount] = '\0'; // make sure buf holds a c style string
+          cout << "(after gets hello) Got '" << buff << "'" << endl;
+          cout << "sending an action to client" << endl;
+          peerSocket.WrappedWrite(fake.c_str(), fake.length());
+    }
 
 
   } catch (string errString) {         //end of try }
@@ -124,18 +186,5 @@ int main(int argc, char *argv[]) {
 
 
 
-// void sendToClient(hw5_net::ServerSocket sock, string message){
-//       char buf[1024];
-//       sock.WrappedWrite(message.c_str(), message.length());
-//       int readCount = sock.WrappedRead(buf, 1023);
-//       buf[readCount] = '\0';
-//       cout << "\tSent to client '" << buf << "'" << endl;
-// }
-
-
-
 ///---------------server helper methods----------------------///
-char* constructHelloackMsg(){
-  //deserialize test25by5.json
-  //add filed  "action: helloack" 
-}
+// 
