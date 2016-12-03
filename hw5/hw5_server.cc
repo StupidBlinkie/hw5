@@ -17,16 +17,20 @@ string fake = "{\"action\": \"move\" }";
 string Message_game  = "from server: nothing for now";
 string Message_helloack = "helloack";
 
-GtkWidget *grid;
-GtkWidget *window;
 
 
 
 void activate (GtkApplication *app, gpointer user_data) {
-
+  GtkWidget *grid;
+  GtkWidget *window;
   //////********************************************************
   /////**********TO-DO: Need to figure out a way to pass peerSocket **************//////
   //////********************************************************
+
+  //////**********update: this line works, and brings up the app window ***********/////
+  //////*********** BUT the activate function does not loop as I expected..we want it keep running********///
+  hw5_net::ClientSocket peerSocket (*(int*)user_data);
+
    int readCount = 0;
    char buff[2048];
    readCount = peerSocket.WrappedRead(buff, 2047) ;
@@ -195,7 +199,7 @@ int main(int argc, char *argv[]) {
    GtkApplication *app;
    int status;
    app = gtk_application_new ("candy.crush", G_APPLICATION_FLAGS_NONE);
-   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
+   g_signal_connect (app, "activate", G_CALLBACK (activate), &acceptedFd);
    status = g_application_run (G_APPLICATION (app), 0, argv);
 
 
