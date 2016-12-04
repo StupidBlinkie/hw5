@@ -13,9 +13,8 @@ extern "C"{
 }
 
 using namespace std;
-string fakemove = "{\"action\": \"move\" }";
-string Message_game  = "from server: nothing for now";
-string Message_helloack = "helloack";
+string fakemove = "{\"action\": \"move\"}";
+
 
   GtkWidget *grid;
   GtkWidget *window;
@@ -26,20 +25,22 @@ void dosomething(gpointer user_data){
   cout << "(inside dosomething---) about to create socket" << endl;
   hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)user_data; //create a new socket with same fd
   cout << "(inside dosomething---) about to send an action to client" << endl;
-  //peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
-  cout << "(inside dosomething---) I just sent an action, client's loop should stop" << endl;
+  //cout << "in dosomething, user_data is " << user_data << endl;
+  //cout << "in dosomething, peerSocket address is " << &peerSocket << endl;
+  peerSocket.WrappedWrite(fakemove.c_str(), 2047);
+  cout << "(inside dosomething---) I just sent an action" << endl;
 }
 
 void activate (GtkApplication *app, gpointer user_data) {
 
   hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)user_data;
   //cout << "in activate, user_data is " << *(int*)user_data << endl;
-
+   cout << "in activate, user_data is " << user_data << endl;
+   cout << "in activate, peerSocket address is " << &peerSocket << endl;
   
    int readCount = 0;
    char buf[2048];
    readCount = peerSocket.WrappedRead(buf, 2047);  //waits for after_helloack_message
-
 
    buf[readCount] = '\0'; // make sure buf holds a c style string
    cout << "(inside activate---)" << buf << "'" << endl;
@@ -81,16 +82,14 @@ void activate (GtkApplication *app, gpointer user_data) {
 
    gtk_widget_show_all (window);
 
-    double timing = 350000;
-    while (timing > 0){
-      timing --;
-      cout<< timing << endl;
-    }
-   cout << "(inside activate---) end of activate" << endl;
-    peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
-   //peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());   //**NEED A write here
+    // double timing = 350000;
+    // while (timing > 0){
+    //   timing --;
+    //   cout<< timing << endl;
+    // }
+    cout << "(inside activate---) end of activate" << endl;
+    //peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
 
-  // peerSocket.WrappedWrite(buff, 2047);  //write n times here,  client's loop will read n times
 }
 
 
@@ -159,7 +158,7 @@ int main(int argc, char *argv[]) {
     void* peer_sock = &peerSocket;
 
     cout << "in main, peerSocket address is " << &peerSocket << endl;
-    cout << "in main, peer_sock address is " << &peer_sock << endl;
+
     cout << "Reading" << endl;
 
     char buf[2048];
@@ -191,12 +190,12 @@ int main(int argc, char *argv[]) {
         char* helloack_message = generate_helloack_message(argv[1]);
 
 
-        double timing = 350000;
-        while (timing > 0){
-          timing --;
-          cout<< timing << endl;
-        }
-        peerSocket.WrappedWrite(helloack_message, 2048);  //TO-DO: not safe here if gameboard is large, convert to string then use str.length()?
+        // double timing = 350000;
+        // while (timing > 0){
+        //   timing --;
+        //   cout<< timing << endl;
+        // }
+        peerSocket.WrappedWrite(helloack_message, 2047);  //TO-DO: not safe here if gameboard is large, convert to string then use str.length()?
       } 
       
     } //end of while }
@@ -206,6 +205,7 @@ int main(int argc, char *argv[]) {
    GtkApplication *app;
    int status;
    app = gtk_application_new ("candy.crush", G_APPLICATION_FLAGS_NONE);
+   //cout << "in main, user_data is " << &peerSocket << endl;
    g_signal_connect (app, "activate", G_CALLBACK (activate), &peerSocket);
    status = g_application_run (G_APPLICATION (app), 0, argv);
 

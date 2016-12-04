@@ -48,21 +48,20 @@ int main(int argc, char *argv[]) {
     string serverName(argv[1]);
     hw5_net::ClientSocket clientSocket(serverName, serverPort);
     char buf[2048];
-        double timing = 350000;
-    while (timing > 0){
-      timing --;
-      cout<< timing << endl;
-    }
+    //     double timing = 350000;
+    // while (timing > 0){
+    //   timing --;
+    //   cout<< timing << endl;
+    // }
     clientSocket.WrappedWrite(Message_hello.c_str(), Message_hello.length());   
 
     int readCount = clientSocket.WrappedRead(buf, 2047);  //waits for server write helloack
     buf[readCount] = '\0';
     cout << "\tFIrst Read '" << buf << "'" << endl;
     cout << "\t Readcount is  " << readCount << endl;
+    
+
     json_t * gamedata = json_loads(buf, JSON_COMPACT, NULL);
-
-
-    //json_t* gamedata = json_loads(fakeupdate.c_str(), JSON_COMPACT ,NULL);
     g_def = new gameDef();
     g_state = new gameState();
     deserialize(gamedata);  //loads g_def
@@ -71,35 +70,46 @@ int main(int argc, char *argv[]) {
     //load gamestate apply template compute new g_state
     applyTemplate();
 
+
     //serialize new game_state
     char* after_helloack_message = serialize();
     //send back
 
-timing = 350000;
-    while (timing > 0){
-      timing --;
-      cout<< timing << endl;
-    }
+// timing = 350000;
+//     while (timing > 0){
+//       timing --;
+//       cout<< timing << endl;
+//     }
+
+        //readCount is 1 at this point
+    cout << "\t Readcount is  " << readCount << endl;
 
     clientSocket.WrappedWrite(after_helloack_message,2047);
 
 
-
-    ////////////////////////Major issue****************************************///////////////////////////
-    ////////////////////////This read here doesn't wait for a write from server//////////////////////////
-    cout << "is following read waiting for a write from server????" << endl;
-
-    char buff[2048];
-    readCount = clientSocket.WrappedRead(buff, 2047);  
-    buff[readCount] = '\0';
-
-    cout << "\tRead what am I reading?------->>>" << buf << "<<<" << endl;
+    //readCount is 1 at this point
     cout << "\t Readcount is  " << readCount << endl;
+
+   
+    cout << "this read waits for server to write..." << endl;
+    char buff[2048];
+    int readCount1;
+    readCount1 = clientSocket.WrappedRead(buff, 2047);  
+    buff[readCount1] = '\0';
+
+    cout << "\tRead what am I reading? >>>>>>> '" << buff << "'" << endl;
+    cout << "\t Readcount1 is  " << readCount1 << endl;
     cout << "last line before while loop --------sent serialized data---------------------" << endl;
 
 
+    //******************************************
+    //the above line of read waits for the write in activate() from server
+    //once that write is executed, gtk brings up the window,
+    //the following line of read does not wait for a write from server again..
+    //why?
+    //******************************************
 
-
+    readCount1 = clientSocket.WrappedRead(buff, 2047);
 
 
     // int count = 1;
