@@ -13,24 +13,26 @@ extern "C"{
 }
 
 using namespace std;
-string fake = "{\"action\": \"move\" }";
+string fakemove = "{\"action\": \"move\" }";
 string Message_game  = "from server: nothing for now";
 string Message_helloack = "helloack";
 
-
-
-
-void activate (GtkApplication *app, gpointer user_data) {
   GtkWidget *grid;
   GtkWidget *window;
-  //////********************************************************
-  /////**********TO-DO: Need to figure out a way to pass peerSocket **************//////
-  //////********************************************************
 
-  //////**********update: this line works, and brings up the app window ***********/////
-  //////*********** BUT the activate function does not loop as I expected..we want it keep running********///
+
+void dosomething(gpointer user_data){
+  int socketFd = *(int*)user_data;
+  hw5_net::ClientSocket peerSocket (socketFd); //create a new socket with same fd
+}
+
+void activate (GtkApplication *app, gpointer user_data) {
+
+  int socketFd = *(int*)user_data;
+  cout << "in activate, user_data is " << *(int*)user_data << endl;
+
   hw5_net::ClientSocket peerSocket (*(int*)user_data);
-
+    cout << "in activate, peerSocket address is " << &peerSocket << endl;
    int readCount = 0;
    char buff[2048];
    readCount = peerSocket.WrappedRead(buff, 2047) ;
@@ -39,13 +41,16 @@ void activate (GtkApplication *app, gpointer user_data) {
    cout << "(inside activate---) sending an action to client" << endl;
 
 
+   //test.. may need to write the same message back here once to make things work
+   //peerSocket.WrappedWrite(buff, 2047);  CANT PUT HERE
+
    window = gtk_application_window_new (app);
    gtk_window_set_title (GTK_WINDOW (window), "Window");
    gtk_window_set_default_size (GTK_WINDOW (window), 40*6, 40*6);
    gtk_container_set_border_width (GTK_CONTAINER (window), 10);
-
    grid = gtk_grid_new();
    gtk_container_add (GTK_CONTAINER (window), grid);
+
 
    GtkButton *button;
    //view_construct_grid();
@@ -54,29 +59,32 @@ void activate (GtkApplication *app, gpointer user_data) {
    //four control buttons + 1 quit button
    button = (GtkButton*) gtk_button_new_with_label (NULL);
    gtk_button_set_image(button, gtk_image_new_from_file ("../images/direction/up.png"));
-   g_signal_connect (button, "clicked", G_CALLBACK (NULL), NULL);
+   g_signal_connect (button, "clicked", G_CALLBACK (dosomething), user_data);
    gtk_grid_attach (GTK_GRID (grid), (GtkWidget*) button, 6, 0, 1, 1); // need to fix these parameters
 
-   button = (GtkButton*) gtk_button_new_with_label (NULL);
-   gtk_button_set_image(button, gtk_image_new_from_file ("../images/direction/down.png"));
-   g_signal_connect (button, "clicked", G_CALLBACK (NULL), NULL);
-   gtk_grid_attach (GTK_GRID (grid),(GtkWidget*)  button, 6, 1, 1, 1);
+   // button = (GtkButton*) gtk_button_new_with_label (NULL);
+   // gtk_button_set_image(button, gtk_image_new_from_file ("../images/direction/down.png"));
+   // g_signal_connect (button, "clicked", G_CALLBACK (NULL), NULL);
+   // gtk_grid_attach (GTK_GRID (grid),(GtkWidget*)  button, 6, 1, 1, 1);
 
-   button = (GtkButton*) gtk_button_new_with_label (NULL);
-   gtk_button_set_image(button, gtk_image_new_from_file ("../images/direction/left.png"));
-   g_signal_connect (button, "clicked", G_CALLBACK (NULL), NULL);
-   gtk_grid_attach (GTK_GRID (grid), (GtkWidget*) button, 6, 2, 1, 1);
+   // button = (GtkButton*) gtk_button_new_with_label (NULL);
+   // gtk_button_set_image(button, gtk_image_new_from_file ("../images/direction/left.png"));
+   // g_signal_connect (button, "clicked", G_CALLBACK (NULL), NULL);
+   // gtk_grid_attach (GTK_GRID (grid), (GtkWidget*) button, 6, 2, 1, 1);
 
-   button = (GtkButton*) gtk_button_new_with_label (NULL);
-   gtk_button_set_image(button, gtk_image_new_from_file ("../images/direction/right.png"));
-   g_signal_connect (button, "clicked", G_CALLBACK (NULL), NULL);
-   gtk_grid_attach (GTK_GRID (grid), (GtkWidget*) button, 6, 3, 1, 1);
+   // button = (GtkButton*) gtk_button_new_with_label (NULL);
+   // gtk_button_set_image(button, gtk_image_new_from_file ("../images/direction/right.png"));
+   // g_signal_connect (button, "clicked", G_CALLBACK (NULL), NULL);
+   // gtk_grid_attach (GTK_GRID (grid), (GtkWidget*) button, 6, 3, 1, 1);
 
    gtk_widget_show_all (window);
 
 
-   cout << "inside activate---) about to send action" << endl;
-   peerSocket.WrappedWrite(fake.c_str(), fake.length());
+   cout << "(inside activate---) end of activate" << endl;
+   // peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
+   peerSocket.WrappedWrite(buff, 2047);   //**NEED A write here
+
+  // peerSocket.WrappedWrite(buff, 2047);  //write n times here,  client's loop will read n times
 }
 
 
@@ -142,7 +150,10 @@ int main(int argc, char *argv[]) {
 
     // wrap connection to peer with a CientSocket
     hw5_net::ClientSocket peerSocket(acceptedFd);
+    void* peer_sock = &peerSocket;
 
+    cout << "in main, peerSocket address is " << &peerSocket << endl;
+    cout << "in main, peer_sock address is " << &peer_sock << endl;
     cout << "Reading" << endl;
 
     char buf[2048];
@@ -192,17 +203,23 @@ int main(int argc, char *argv[]) {
     //       buff[readCount] = '\0'; // make sure buf holds a c style string
     //       cout << "(after gets hello) Got '" << buff << "'" << endl;
     //       cout << "sending an action to client" << endl;
-    //       peerSocket.WrappedWrite(fake.c_str(), fake.length());
+    //       peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
     // }
 
        //gtk
+
+  cout << "in main, gtk check point 1" << endl;
    GtkApplication *app;
    int status;
+  
    app = gtk_application_new ("candy.crush", G_APPLICATION_FLAGS_NONE);
+
    g_signal_connect (app, "activate", G_CALLBACK (activate), &acceptedFd);
+ 
+
    status = g_application_run (G_APPLICATION (app), 0, argv);
 
-
+    cout << "in main, gtk check point 2" << endl;
 
 
   } catch (string errString) {         //end of try }

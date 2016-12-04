@@ -15,7 +15,7 @@ extern "C"{
 using namespace std;
 
 
-string fake = "{\"action\": \"fake\", \"gameinstance\": {\"gamedef\": {\"extensioncolor\": {\"rows\": 6, \"columns\": 6, \"data\": [0, 3, 1, 2, 2, 1, 0, 1, 3, 0, 0, 3, 1, 3, 2, 0, 1, 2, 3, 3, 3, 3, 0, 0, 0, 3, 1, 0, 1, 0, 1, 1, 3, 3, 3, 2]}, \"boardstate\": {\"rows\": 6, \"columns\": 6, \"data\": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}, \"movesallowed\": 24, \"gameid\": 66, \"colors\": 4}, \"gamestate\": {\"movesmade\": 0, \"currentscore\": 18, \"extensionoffset\": [12, 22, 11, 13, 8, 7], \"boardcandies\": {\"rows\": 6, \"columns\": 6, \"data\": [{\"color\": 0, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 1, \"type\": 0}]}, \"boardstate\": {\"rows\": 6, \"columns\": 6, \"data\": [1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1]}}}}";
+string fakeupdate = "{\"action\": \"fakeupdate\", \"gameinstance\": {\"gamedef\": {\"extensioncolor\": {\"rows\": 6, \"columns\": 6, \"data\": [0, 3, 1, 2, 2, 1, 0, 1, 3, 0, 0, 3, 1, 3, 2, 0, 1, 2, 3, 3, 3, 3, 0, 0, 0, 3, 1, 0, 1, 0, 1, 1, 3, 3, 3, 2]}, \"boardstate\": {\"rows\": 6, \"columns\": 6, \"data\": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}, \"movesallowed\": 24, \"gameid\": 66, \"colors\": 4}, \"gamestate\": {\"movesmade\": 0, \"currentscore\": 18, \"extensionoffset\": [12, 22, 11, 13, 8, 7], \"boardcandies\": {\"rows\": 6, \"columns\": 6, \"data\": [{\"color\": 0, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 3, \"type\": 0}, {\"color\": 1, \"type\": 0}, {\"color\": 2, \"type\": 0}, {\"color\": 0, \"type\": 0}, {\"color\": 1, \"type\": 0}]}, \"boardstate\": {\"rows\": 6, \"columns\": 6, \"data\": [1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1]}}}}";
 
 
 string Message_hello  = "hello";
@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
     json_t * gamedata = json_loads(buf, JSON_COMPACT, NULL);
 
 
-    //json_t* gamedata = json_loads(fake.c_str(), JSON_COMPACT ,NULL);
+    //json_t* gamedata = json_loads(fakeupdate.c_str(), JSON_COMPACT ,NULL);
     g_def = new gameDef();
     g_state = new gameState();
     deserialize(gamedata);  //loads g_def
@@ -67,11 +67,11 @@ int main(int argc, char *argv[]) {
     applyTemplate();
 
     //serialize new game_state
-    serialize();
+    char* after_helloack_message = serialize();
     //send back
-    //string sendback = std::string str(serialized_data);
-    clientSocket.WrappedWrite(serialized_data,2047);
-    readCount = clientSocket.WrappedRead(buf, 2047);   //need to read out a '' here ** see output
+
+    clientSocket.WrappedWrite(after_helloack_message,2047);
+    readCount = clientSocket.WrappedRead(buf, 2047);   //*****need to read once here ** see output
     cout << "\tRead what am I reading?-------'" << buf << "'" << endl;
 
     cout << "last line before while loop --------wrote serialized data---------------------" << endl;
@@ -79,9 +79,9 @@ int main(int argc, char *argv[]) {
 
 
 
-    int count = 0;
+    int count = 1;
     char buff[2048];
-    while (ServerSaysBye == false && count < 2){
+    while (ServerSaysBye == false && count <= 5){
       //********WRITE computed gameinstance**********/////
       // jannson functions covert but to json
       // deserialize json object 
@@ -92,35 +92,22 @@ int main(int argc, char *argv[]) {
       // Array2dPtr arr = NULL;
 
 
-
-
-
-
-      cout << "inside while loop" << endl;
-
+      cout << "inside while loop, --- count = " << count << endl;
 
       readCount = clientSocket.WrappedRead(buff, 2047);
       buff[readCount] = '\0';
       cout << "\tRead '" << buff << "'" << endl;
 
-      clientSocket.WrappedWrite(fake.c_str(), fake.length());
- 
+
+      //TO DO------ the client does not wait for message from server 
+      //***********  it runs the loop and exits  
+    
+
+      //clientSocket.WrappedWrite(fakeupdate.c_str(), fakeupdate.length());
+      
+      //readCount = clientSocket.WrappedRead(buff, 2047);
 
 
-
-
-      // char* temp = "bye";
-      // bool match_bye = 1;
-      // for (int i = 0; i < 4; i++){
-      //   if(buf[i] != temp[i]){
-      //     cout << buf[i] << " -- " << temp[i] << endl;
-      //     match_bye = 0;
-      //   }
-      // }
-      // if (match_bye == 1){ //received bye from server
-      //   ServerSaysBye = true;
-      //   cout << "received bye from server" << endl;
-      // }
       count ++;  //replace it later
     }
 
@@ -147,76 +134,6 @@ int main(int argc, char *argv[]) {
 
 
 
-void deserialize2dArray(json_t *json, bool reading_first_array){
-    //read rows
-    json_t* json_row = json_object_get(json, "rows");
-    int rows = json_integer_value(json_row); 
-    //read cols
-    json_t* json_col = json_object_get(json, "columns");
-    int cols = json_integer_value(json_col);
-  
-    //read json array
-    json_t* json_data = json_object_get(json, "data");
-
-    //store in an temporary int array
-    int* data = (int*)malloc(rows * cols *sizeof(int));
-        for (size_t i = 0; i < json_array_size(json_data); i++) {
-            data[i] = json_integer_value(json_array_get(json_data, i));
-    }
-    
-
-    //load to different fileds of g_def
-    if (reading_first_array){
-      g_def->set_extensionColor(rows, cols, data);
-    }
-    else {
-      g_def->set_boardState(rows,cols,data);
-    }
-    
-    //g_def set functions deep copied the data, so free immediately after use
-    free(data); 
-}
-
-//read json and load into 2d array arr
-void deserialize(json_t* json){
-    cout << "starting deserialize" << endl;
-    json_t* gameinstance_json = json_object_get(json, "gameinstance");
-
-    json_t* gamedef_json = json_object_get(gameinstance_json, "gamedef");
-    if (gamedef_json == NULL) {
-      cout << "did not find gamedef" << endl;
-    }
-
-    json_t *extension = json_object_get(gamedef_json, "extensioncolor");
-    if (extension == NULL) {
-      cout << "did not find extensioncolor" << endl;
-    }
-    deserialize2dArray(extension, 1); //1 and 0 to indicate if reading first or second array
-    //iterate to boardstate field
-    json_t *boardstate = json_object_get(gamedef_json, "boardstate");
-    deserialize2dArray(boardstate, 0);
-    
-    //iterate to moves allowed
-    int movesAllowed = json_integer_value(json_object_get(gamedef_json, "movesallowed"));
-
-    //iterate to id
-    int id = json_integer_value(json_object_get(gamedef_json, "gameid"));
-    //iterate to color
-    int colors = json_integer_value(json_object_get(gamedef_json, "colors"));
-
-    g_def->set_gameID(id);
-    g_def->set_movesAllowed(movesAllowed);
-    g_def->set_colors(colors);
-
-    json_t *gamestate_json = json_object_get(gameinstance_json, "gamestate");
-
-    cout << "about to initialize gamestate" << endl;
-    g_state->initialize(g_def, gamestate_json);
-    json_decref(json);
-    cout << "ending deserialize" << endl;
-}
-
-
 
 
 /*----------------internal game logic methods for model*---------------*/
@@ -235,8 +152,6 @@ bool applyTemplate() {
    
    return (numberTemplatesFired > 0);     
 }
-
-
 
 bool VFour() {
    bool foundFire = false;
@@ -389,8 +304,78 @@ void applyGravity() {
 }
 
 
+/*---------------------------serialize/deserilaize--------------------------------------*/
+void deserialize2dArray(json_t *json, bool reading_first_array){
+    //read rows
+    json_t* json_row = json_object_get(json, "rows");
+    int rows = json_integer_value(json_row); 
+    //read cols
+    json_t* json_col = json_object_get(json, "columns");
+    int cols = json_integer_value(json_col);
+  
+    //read json array
+    json_t* json_data = json_object_get(json, "data");
 
-void serialize(){ 
+    //store in an temporary int array
+    int* data = (int*)malloc(rows * cols *sizeof(int));
+        for (size_t i = 0; i < json_array_size(json_data); i++) {
+            data[i] = json_integer_value(json_array_get(json_data, i));
+    }
+    
+
+    //load to different fileds of g_def
+    if (reading_first_array){
+      g_def->set_extensionColor(rows, cols, data);
+    }
+    else {
+      g_def->set_boardState(rows,cols,data);
+    }
+    
+    //g_def set functions deep copied the data, so free immediately after use
+    free(data); 
+}
+
+//read json and load into 2d array arr
+void deserialize(json_t* json){
+    cout << "starting deserialize" << endl;
+    json_t* gameinstance_json = json_object_get(json, "gameinstance");
+
+    json_t* gamedef_json = json_object_get(gameinstance_json, "gamedef");
+    if (gamedef_json == NULL) {
+      cout << "did not find gamedef" << endl;
+    }
+
+    json_t *extension = json_object_get(gamedef_json, "extensioncolor");
+    if (extension == NULL) {
+      cout << "did not find extensioncolor" << endl;
+    }
+    deserialize2dArray(extension, 1); //1 and 0 to indicate if reading first or second array
+    //iterate to boardstate field
+    json_t *boardstate = json_object_get(gamedef_json, "boardstate");
+    deserialize2dArray(boardstate, 0);
+    
+    //iterate to moves allowed
+    int movesAllowed = json_integer_value(json_object_get(gamedef_json, "movesallowed"));
+
+    //iterate to id
+    int id = json_integer_value(json_object_get(gamedef_json, "gameid"));
+    //iterate to color
+    int colors = json_integer_value(json_object_get(gamedef_json, "colors"));
+
+    g_def->set_gameID(id);
+    g_def->set_movesAllowed(movesAllowed);
+    g_def->set_colors(colors);
+
+    json_t *gamestate_json = json_object_get(gameinstance_json, "gamestate");
+
+    cout << "about to initialize gamestate" << endl;
+    g_state->initialize(g_def, gamestate_json);
+    json_decref(json);
+    cout << "ending deserialize" << endl;
+}
+
+
+char* serialize(){ 
   json_t* obj = json_object();
 
   //------------------serialize gamedef--------------------
@@ -498,10 +483,18 @@ void serialize(){
 
   //END ------------------------- serialize gamestate----------------------
 
-  //output 
+
   json_object_set(obj, "gamedef", gamedef);
   json_object_set(obj, "gamestate", gamestate);
-  serialized_data = json_dumps(obj , NULL);
+
+  json_t* json_final = json_object();
+  json_object_set(json_final, "action", json_string("update"));
+  json_object_set(json_final, "gameinstance", obj);
+
+
+  char* temp = json_dumps(json_final , NULL);
+
+
 
   //decref obj
   json_decref(obj);
@@ -529,5 +522,7 @@ void serialize(){
   json_decref(extensionoffset);
   json_decref(movesmade);
   json_decref(currentscore);
+
+  return temp;
 
 }
