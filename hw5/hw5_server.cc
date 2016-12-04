@@ -4,9 +4,9 @@
 
 #include "ServerSocket.h"
 #include "ClientSocket.h"
+#include "hw5_server.h"
 
-//#include "../hw4/hw4/hw4_view.h"
-//#include "hw4_controller.h"
+
 extern "C"{
     #include "../jansson/include/jansson.h"
     #include <gtk/gtk.h>
@@ -27,24 +27,40 @@ void dosomething(gpointer user_data){
   cout << "(inside dosomething---) about to send an action to client" << endl;
   //cout << "in dosomething, user_data is " << user_data << endl;
   //cout << "in dosomething, peerSocket address is " << &peerSocket << endl;
-  peerSocket.WrappedWrite(fakemove.c_str(), 2047);
+  peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
   cout << "(inside dosomething---) I just sent an action" << endl;
+
+   // int readCount = 0;
+   // char buf[2048];
+   // readCount = peerSocket.WrappedRead(buf, 2047);  //waits for after_helloack_message
+
+   // buf[readCount] = '\0'; // make sure buf holds a c style string
+   // cout << "(inside activate---)" << buf << "'" << endl;
+   // cout << "(inside activate---) sending an action to client" << endl;
 }
 
 void activate (GtkApplication *app, gpointer user_data) {
 
-  hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)user_data;
-  //cout << "in activate, user_data is " << *(int*)user_data << endl;
+   hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)user_data;
+   //cout << "in activate, user_data is " << *(int*)user_data << endl;
    cout << "in activate, user_data is " << user_data << endl;
    cout << "in activate, peerSocket address is " << &peerSocket << endl;
-  
-   int readCount = 0;
-   char buf[2048];
-   readCount = peerSocket.WrappedRead(buf, 2047);  //waits for after_helloack_message
 
-   buf[readCount] = '\0'; // make sure buf holds a c style string
-   cout << "(inside activate---)" << buf << "'" << endl;
-   cout << "(inside activate---) sending an action to client" << endl;
+    //int readCount = 0;
+    //char buf[2048];
+    //readCount = peerSocket.WrappedRead(buf, 2047);  //waits for after_helloack_message
+    
+    double timing = 350000;
+    while (timing > 0){
+      timing --;
+      cout<< timing << endl;
+    }
+    cout << "(inside activate---) end of activate" << endl;
+    peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
+
+   // buf[readCount] = '\0'; // make sure buf holds a c style string
+   // cout << "(inside activate---)" << buf << "'" << endl;
+   // cout << "(inside activate---) sending an action to client" << endl;
 
 
    window = gtk_application_window_new (app);
@@ -65,21 +81,6 @@ void activate (GtkApplication *app, gpointer user_data) {
    g_signal_connect (button, "clicked", G_CALLBACK (dosomething), user_data);
    gtk_grid_attach (GTK_GRID (grid), (GtkWidget*) button, 6, 0, 1, 1); // need to fix these parameters
 
-   // button = (GtkButton*) gtk_button_new_with_label (NULL);
-   // gtk_button_set_image(button, gtk_image_new_from_file ("../images/direction/down.png"));
-   // g_signal_connect (button, "clicked", G_CALLBACK (NULL), NULL);
-   // gtk_grid_attach (GTK_GRID (grid),(GtkWidget*)  button, 6, 1, 1, 1);
-
-   // button = (GtkButton*) gtk_button_new_with_label (NULL);
-   // gtk_button_set_image(button, gtk_image_new_from_file ("../images/direction/left.png"));
-   // g_signal_connect (button, "clicked", G_CALLBACK (NULL), NULL);
-   // gtk_grid_attach (GTK_GRID (grid), (GtkWidget*) button, 6, 2, 1, 1);
-
-   // button = (GtkButton*) gtk_button_new_with_label (NULL);
-   // gtk_button_set_image(button, gtk_image_new_from_file ("../images/direction/right.png"));
-   // g_signal_connect (button, "clicked", G_CALLBACK (NULL), NULL);
-   // gtk_grid_attach (GTK_GRID (grid), (GtkWidget*) button, 6, 3, 1, 1);
-
    gtk_widget_show_all (window);
 
     // double timing = 350000;
@@ -87,9 +88,11 @@ void activate (GtkApplication *app, gpointer user_data) {
     //   timing --;
     //   cout<< timing << endl;
     // }
+    // cout << "(inside activate---) end of activate" << endl;
+    // peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
+
+
     cout << "(inside activate---) end of activate" << endl;
-    //peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
-
 }
 
 
@@ -97,27 +100,6 @@ void activate (GtkApplication *app, gpointer user_data) {
 
 
 
-
-
-void usage(const char *exeName) {
-  cout << "Usage: " << exeName << " filename" << endl;
-  exit(1);
-}
-
-
-char* generate_helloack_message(char* file){
-  json_t* json_from_file = json_load_file(file, JSON_COMPACT, NULL);
-  json_t* json_final = json_object();
-  json_object_set(json_final, "action", json_string("helloack"));
-  json_object_set(json_final, "gameinstance", json_from_file);
-
-  return json_dumps(json_final, NULL); 
-}
-
-
-// void foo (hw5_net::ClientSocket ps){
-//   hw5_net::ClientSocket peerSocket = ps;
-// }
 
 
 int main(int argc, char *argv[]) {
@@ -201,16 +183,21 @@ int main(int argc, char *argv[]) {
     } //end of while }
 
 
-    cout << "in main, gtk check point 1" << endl;
+   int readCount1 = 0;
+   char buff[2048];
+   readCount1 = peerSocket.WrappedRead(buff, 2047);  //waits for after_helloack_message
+   cout << "Read helloack >>>>" << buff  << endl;
+   buf[readCount] = '\0'; // make sure buf holds a c style string
+
+   cout << "in main, gtk check point 1" << endl;
    GtkApplication *app;
    int status;
    app = gtk_application_new ("candy.crush", G_APPLICATION_FLAGS_NONE);
-   //cout << "in main, user_data is " << &peerSocket << endl;
    g_signal_connect (app, "activate", G_CALLBACK (activate), &peerSocket);
+   cout << "in main, gtk check point 1.5" << endl;
    status = g_application_run (G_APPLICATION (app), 0, argv);
-
-    cout << "in main, gtk check point 2" << endl;
-
+   cout << "in main, gtk check point 2" << endl;
+ 
 
   } catch (string errString) {         //end of try }
     cerr << errString << endl;
@@ -225,4 +212,16 @@ int main(int argc, char *argv[]) {
 
 
 ///---------------server helper methods----------------------///
-// 
+
+void usage(const char *exeName) {
+  cout << "Usage: " << exeName << " filename" << endl;
+  exit(1);
+}
+char* generate_helloack_message(char* file){
+  json_t* json_from_file = json_load_file(file, JSON_COMPACT, NULL);
+  json_t* json_final = json_object();
+  json_object_set(json_final, "action", json_string("helloack"));
+  json_object_set(json_final, "gameinstance", json_from_file);
+
+  return json_dumps(json_final, NULL); 
+}
