@@ -21,7 +21,7 @@ string fakeupdate = "{\"action\": \"fakeupdate\", \"gameinstance\": {\"gamedef\"
 string Message_hello  = "hello";
 string Message_bye = "bye";
 string Message_game  = "nothing for now";
-bool ServerSaysBye = false;
+bool ServerSaysBye = 0;
 
 gameDef* g_def;
 gameState* g_state;
@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
     int readCount = clientSocket.WrappedRead(buf, 2047);
     buf[readCount] = '\0';
     cout << "\tFIrst Read '" << buf << "'" << endl;
-
+    cout << "\t Readcount is  " << readCount << endl;
     json_t * gamedata = json_loads(buf, JSON_COMPACT, NULL);
 
 
@@ -62,8 +62,7 @@ int main(int argc, char *argv[]) {
     deserialize(gamedata);  //loads g_def
     cout<< "g_def method (movesallowed)----------" << g_def->get_movesAllowed() << endl;
     cout<< "g_state method (currentscore)----------" << g_state->get_currScore() << endl;
-    //load gamestate
-    //apply template compute new g_state
+    //load gamestate apply template compute new g_state
     applyTemplate();
 
     //serialize new game_state
@@ -72,16 +71,19 @@ int main(int argc, char *argv[]) {
 
     clientSocket.WrappedWrite(after_helloack_message,2047);
     readCount = clientSocket.WrappedRead(buf, 2047);   //*****need to read once here ** see output
-    cout << "\tRead what am I reading?-------'" << buf << "'" << endl;
+    cout << "\tRead what am I reading?------->>>" << buf << "<<<" << endl;
+    cout << "\t Readcount is  " << readCount << endl;
+    cout << "last line before while loop --------sent serialized data---------------------" << endl;
 
-    cout << "last line before while loop --------wrote serialized data---------------------" << endl;
-
+    
 
 
 
     int count = 1;
     char buff[2048];
-    while (ServerSaysBye == false && count <= 5){
+    readCount = 0; //reset read count to 0
+
+    while ( ServerSaysBye == 0 ){   //ServerSaysBye == false
       //********WRITE computed gameinstance**********/////
       // jannson functions covert but to json
       // deserialize json object 
@@ -92,24 +94,30 @@ int main(int argc, char *argv[]) {
       // Array2dPtr arr = NULL;
 
 
+      //always read
       cout << "inside while loop, --- count = " << count << endl;
-
       readCount = clientSocket.WrappedRead(buff, 2047);
+      if (readCount == 0){
+        count ++;
+        continue;
+      }
+
+
       buff[readCount] = '\0';
       cout << "\tRead '" << buff << "'" << endl;
+      cout << "\twhen gets a message, Readcount is  " << readCount << endl;
+      ServerSaysBye == 1;
 
 
-      //TO DO------ the client does not wait for message from server 
-      //***********  it runs the loop and exits  
-    
-
+  
       //clientSocket.WrappedWrite(fakeupdate.c_str(), fakeupdate.length());
       
-      //readCount = clientSocket.WrappedRead(buff, 2047);
-
 
       count ++;  //replace it later
     }
+
+
+
 
 
     
@@ -285,20 +293,20 @@ void applyGravity() {
          
    // all -1s should be on top. all left over candies should be on bottom
    // put candies fro extension board in -1 candies;
-      cout << "column:   " << col << endl;
+      //cout << "column:   " << col << endl;
       if (foundFired) {
          for (int row = lowestFiredRow; row < g_state->get_rows(); row++) {
             int offset = g_state->get_extensionOffset(col) % g_def->get_extensionColor_rows();
-            cout << "offset:   " << offset << endl;
+            //cout << "offset:   " << offset << endl;
             int newColor = *(int*)g_def->get_extensionColor_element(offset, col);
-            cout << "new color:    " << newColor << endl;
+            //cout << "new color:    " << newColor << endl;
             g_state->set_candy_color(row, col, newColor);
             int newOffset = g_state->get_extensionOffset(col) + 1;
             g_state->set_extensionOffset(col, newOffset);
             newOffset = g_state->get_extensionOffset(col) % g_def->get_extensionColor_rows();
-            cout << "new offset:    " << newOffset << endl;
+            //cout << "new offset:    " << newOffset << endl;
          }
-         cout << endl << endl << endl;
+         //cout << endl << endl << endl;
       }
    }
 }

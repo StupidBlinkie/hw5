@@ -23,7 +23,11 @@ string Message_helloack = "helloack";
 
 void dosomething(gpointer user_data){
   int socketFd = *(int*)user_data;
+  cout << "(inside dosomething---)in activate, user_data is " << socketFd << endl;
+  cout << "(inside dosomething---) about to create socket" << endl;
   hw5_net::ClientSocket peerSocket (socketFd); //create a new socket with same fd
+  cout << "(inside dosomething---) about to send an action to client" << endl;
+  peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
 }
 
 void activate (GtkApplication *app, gpointer user_data) {
@@ -40,9 +44,6 @@ void activate (GtkApplication *app, gpointer user_data) {
    cout << "(inside activate---)" << buff << "'" << endl;
    cout << "(inside activate---) sending an action to client" << endl;
 
-
-   //test.. may need to write the same message back here once to make things work
-   //peerSocket.WrappedWrite(buff, 2047);  CANT PUT HERE
 
    window = gtk_application_window_new (app);
    gtk_window_set_title (GTK_WINDOW (window), "Window");
@@ -189,34 +190,11 @@ int main(int argc, char *argv[]) {
     } //end of while }
 
 
-    ////////*** following while loop mimics gtk activate() ****////////////////
-    ////////*** and it is working as expected
-
-    //TODO- we put gtk app/ run/ status stuff here, and do reads and writes inside activate
-    //function, and it should work... if activate is called again and again until
-    //gtk app terminates...
-    
-    // readCount = 0;
-    // char buff[2048];
-    // while(readCount = peerSocket.WrappedRead(buff, 2047) ){
-    //       //readCount = peerSocket.WrappedRead(buff, 2047); 
-    //       buff[readCount] = '\0'; // make sure buf holds a c style string
-    //       cout << "(after gets hello) Got '" << buff << "'" << endl;
-    //       cout << "sending an action to client" << endl;
-    //       peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
-    // }
-
-       //gtk
-
-  cout << "in main, gtk check point 1" << endl;
+    cout << "in main, gtk check point 1" << endl;
    GtkApplication *app;
    int status;
-  
    app = gtk_application_new ("candy.crush", G_APPLICATION_FLAGS_NONE);
-
    g_signal_connect (app, "activate", G_CALLBACK (activate), &acceptedFd);
- 
-
    status = g_application_run (G_APPLICATION (app), 0, argv);
 
     cout << "in main, gtk check point 2" << endl;
