@@ -48,8 +48,14 @@ int main(int argc, char *argv[]) {
     string serverName(argv[1]);
     hw5_net::ClientSocket clientSocket(serverName, serverPort);
     char buf[2048];
+        double timing = 350000;
+    while (timing > 0){
+      timing --;
+      cout<< timing << endl;
+    }
     clientSocket.WrappedWrite(Message_hello.c_str(), Message_hello.length());   
-    int readCount = clientSocket.WrappedRead(buf, 2047);
+
+    int readCount = clientSocket.WrappedRead(buf, 2047);  //waits for server write helloack
     buf[readCount] = '\0';
     cout << "\tFIrst Read '" << buf << "'" << endl;
     cout << "\t Readcount is  " << readCount << endl;
@@ -69,52 +75,67 @@ int main(int argc, char *argv[]) {
     char* after_helloack_message = serialize();
     //send back
 
+timing = 350000;
+    while (timing > 0){
+      timing --;
+      cout<< timing << endl;
+    }
+
     clientSocket.WrappedWrite(after_helloack_message,2047);
-    readCount = clientSocket.WrappedRead(buf, 2047);   //*****need to read once here ** see output
+
+
+
+    ////////////////////////Major issue****************************************///////////////////////////
+    ////////////////////////This read here doesn't wait for a write from server//////////////////////////
+    cout << "is following read waiting for a write from server????" << endl;
+
+    char buff[2048];
+    readCount = clientSocket.WrappedRead(buff, 2047);  
+    buff[readCount] = '\0';
+
     cout << "\tRead what am I reading?------->>>" << buf << "<<<" << endl;
     cout << "\t Readcount is  " << readCount << endl;
     cout << "last line before while loop --------sent serialized data---------------------" << endl;
 
-    
 
 
 
-    int count = 1;
-    char buff[2048];
-    readCount = 0; //reset read count to 0
-
-    while ( ServerSaysBye == 0 ){   //ServerSaysBye == false
-      //********WRITE computed gameinstance**********/////
-      // jannson functions covert but to json
-      // deserialize json object 
-      // compute 
-      // serialize to char*
-      // send back to server
-      //////////////////////////////////////////////////
-      // Array2dPtr arr = NULL;
 
 
-      //always read
-      cout << "inside while loop, --- count = " << count << endl;
-      readCount = clientSocket.WrappedRead(buff, 2047);
-      if (readCount == 0){
-        count ++;
-        continue;
-      }
+    // int count = 1;
+    // char buff[2048];
+    // readCount = 0; //reset read count to 0
+    // //while ( readCount == 0 ){   //ServerSaysBye == false
+    //   //********WRITE computed gameinstance**********/////
+    //   // jannson functions covert but to json
+    //   // deserialize json object 
+    //   // compute 
+    //   // serialize to char*
+    //   // send back to server
+    //   //////////////////////////////////////////////////
+    //   // Array2dPtr arr = NULL;
 
 
-      buff[readCount] = '\0';
-      cout << "\tRead '" << buff << "'" << endl;
-      cout << "\twhen gets a message, Readcount is  " << readCount << endl;
-      ServerSaysBye == 1;
+    //   //always read
+    //   cout << "inside while loop, --- count = " << count << endl;
+    //   readCount = clientSocket.WrappedRead(buff, 2047);
+
+    //   count ++;
+
+
+
+    //   buff[readCount] = '\0';
+    //   cout << "\tRead '" << buff << "'" << endl;
+    //   cout << "\twhen gets a message, Readcount is  " << readCount << endl;
+    //   ServerSaysBye == 1;
 
 
   
-      //clientSocket.WrappedWrite(fakeupdate.c_str(), fakeupdate.length());
+    //   //clientSocket.WrappedWrite(fakeupdate.c_str(), fakeupdate.length());
       
 
-      count ++;  //replace it later
-    }
+    //   count ++;  //replace it later
+    // //}
 
 
 
