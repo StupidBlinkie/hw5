@@ -41,6 +41,6 @@ hw5_client:  hw5_client.o $(OBJS) $(LIBS)
 	$(CC) -std=c11 $(CFLAGS) $(IFLAGS) $(GTKCFLAGS) $(LDFLAGS) -c -std=c11 $<
 
 clean: FORCE
-	/bin/rm -f *.o *~ serverSocketTest clientSocketTest
+	/bin/rm -f *.o *~ hw5_server hw5_client
 
 FORCE:
