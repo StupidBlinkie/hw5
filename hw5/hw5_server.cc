@@ -37,17 +37,16 @@ void* peerSocket_ptr;
 
 void dosomething(gpointer user_data){
 
-//if selected candy, generate a move message and send to client
+ //if selected candy, generate a move message and send to client
 
   if (selected_candy_bool == 1){
 
-      cout << "(inside dosomething---) about to create socket" << endl;
-      //hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)user_data; 
-      hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)peerSocket_ptr;
+      hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)user_data;
+      //hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)peerSocket_ptr;
       cout << "(inside dosomething---) about to send an action to client" << endl;
-      //cout << "in dosomething, user_data is " << user_data << endl;
+      cout << "in dosomething, user_data is " << user_data << endl;
       //cout << "in dosomething, peerSocket address is " << &peerSocket << endl;
-      //peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
+      peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
       cout << "(inside dosomething---) I just sent an action" << endl;
   }else{
     cout<< "please select a candy !" << endl;
@@ -55,10 +54,10 @@ void dosomething(gpointer user_data){
 }
 
 
-
-
-
 void activate (GtkApplication *app, gpointer user_data) {
+cout << "in activate, user_data is " << user_data << endl;
+//hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)user_data; 
+//(*(hw5_net::ClientSocket *)user_data).WrappedWrite(fakemove.c_str(), fakemove.length());
 
    window = gtk_application_window_new (app);
    gtk_window_set_title (GTK_WINDOW (window), "Window");
@@ -67,20 +66,20 @@ void activate (GtkApplication *app, gpointer user_data) {
    grid = gtk_grid_new();
    gtk_container_add (GTK_CONTAINER (window), grid);
 
-
+cout << "(inside activate---) 1" << endl;
    GtkButton *button;
-   view_construct_grid();
-   
+   view_construct_grid(user_data);
 
-   //four control buttons + 1 quit button
+cout << "(inside activate---after view_construct_grid)" << endl;
    button = (GtkButton*) gtk_button_new_with_label (NULL);
    gtk_button_set_image(button, gtk_image_new_from_file ("../images/direction/up.png"));
    g_signal_connect (button, "clicked", G_CALLBACK (dosomething), user_data);
    gtk_grid_attach (GTK_GRID (grid), (GtkWidget*) button, cols, 0, 1, 1); // need to fix these parameters
-
+cout << "(inside activate---) 3" << endl;
    gtk_widget_show_all (window);
    cout << "(inside activate---) end of activate" << endl;
 }
+
 
 
 
@@ -155,18 +154,15 @@ int main(int argc, char *argv[]) {
       
     } //end of while }
 
-    // hw5_net::ClientSocket & ref = peerSocket;
-
-   peerSocket_ptr = &peerSocket;
-
    cout << "in main, gtk check point 1" << endl;
    GtkApplication *app;
    int status;
    app = gtk_application_new ("candy.crush", G_APPLICATION_FLAGS_NONE);
-   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
-   cout << "in main, gtk check point 1.5" << endl;
+   cout << "in main, user_data is " << &peerSocket << endl;
+   g_signal_connect (app, "activate", G_CALLBACK(activate), (gpointer) &peerSocket);
+      cout << "in main, gtk check point 1.5" << endl;
    status = g_application_run (G_APPLICATION (app), 0, argv);
-   cout << "in main, gtk check point 2" << endl;
+      cout << "in main, gtk check point 2" << endl;
  
 
   } catch (string errString) {         //end of try }
@@ -199,9 +195,21 @@ char* generate_helloack_message(char* file){
 
 //----------------new view methods-------------------------///
 
+void view_redraw_grid() {
+   view_destroy_grid();
+   //view_construct_grid();
+}
+void view_destroy_grid() {
+   for (int row = 0; row < rows; row++) {
+      for (int column = 0; column < cols; column++){
+         view_destroy_candy(row, column);
+      }
+   }
+}
 //also constructes move and score labels
-void view_construct_grid(){
-   hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)peerSocket_ptr;
+void view_construct_grid( gpointer user_data ){
+   cout << "in view_construct_grid, user_data is " << user_data << endl;
+   hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)user_data;
 
    //reterive update message
    int readCount1 = 0;
@@ -252,11 +260,11 @@ void view_construct_grid(){
    gtk_grid_attach (GTK_GRID (grid), score_label, cols, 5, 1, 1);
 
 
+   cout << "(inside construct grid---) before write" << endl;
+   //peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
+   cout << "(inside construct grid---) after write" << endl;
 
-
-
-   peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
-   //writes to the same buf in client
+   //socket gets deleted after this
 }
 
 
@@ -275,6 +283,11 @@ void view_create_candy(int candy, int boardStateNum, int row, int col){
 
    gtk_widget_show_all (window);
 }
+
+void view_destroy_candy(int row, int col){
+  gtk_widget_destroy(gtk_grid_get_child_at(GTK_GRID (grid), row, col));
+}
+
 void view_update_moves_label(int m){
    gchar *label_text;
    label_text = g_strdup_printf("moves left: %d", m);
@@ -288,8 +301,6 @@ void view_update_score_label(int s){
    gtk_label_set_text ((GtkLabel*) score_label, label_text);
    free(label_text);
 }
-
-
 
 
 

@@ -67,45 +67,60 @@ int main(int argc, char *argv[]) {
     applyTemplate();
 
     //serialize new game_state
-    char* helloack_message = serialize();
-    clientSocket.WrappedWrite(helloack_message,2047);
+    char* first_update_message = serialize();
+    clientSocket.WrappedWrite(first_update_message,2047);
 
-    cout << "last line before while loop --------sent serialized data---------------------" << endl;
+    cout << "-------last line before while loop, sent serialized data---------------------" << endl;
 
 
 // at this point, if server has a write, read will wait for that write,
 // but the second read won't. since there's no more write unless click a button
 // how to make it wait for non-occured write in server???? (the ones from  user actions functions)
 
-int bye = 0;
-while (bye == 0){
-      hw5_net::ClientSocket newClientSocket(serverName, serverPort);
-      cout << "i'm waiting for a write in activate---------------------" << endl;
-      readCount = newClientSocket.WrappedRead(buf, 2047);
-      char buf[2048];
-      buf[readCount] = '\0';
-      cout << "i got '" << buf << "'" << endl;
-      if(readCount > 10){
-        bye = 1;
+// int bye = 0;
+// while (bye == 0){
+//       hw5_net::ClientSocket newClientSocket(serverName, serverPort);
+//       cout << "i'm waiting for a write in activate---------------------" << endl;
+//       readCount = newClientSocket.WrappedRead(buf, 2047);
+//       char buf[2048];
+//       buf[readCount] = '\0';
+//       cout << "i got '" << buf << "'" << endl;
+//       if(readCount > 10){
+//         bye = 1;
+//       }
+//       newClientSocket.WrappedWrite(fakeupdate.c_str(), fakeupdate.length());
+// }
+// cout<< "left while loop" << endl;
+
+      // cout << "i'm waiting for a write ---------------------" << endl;
+      // readCount = clientSocket.WrappedRead(buf, 2047);
+      // buf[readCount] = '\0';
+      // cout << "i got '" << buf << "'" << endl;
+
+
+      // cout << "i'm waiting for a write ---------------------" << endl;
+      // readCount = clientSocket.WrappedRead(buf, 2047);
+      // buf[readCount] = '\0';
+      // cout << "i got '" << buf << "'" << endl;
+
+      // cout << "i'm waiting for a write ---------------------" << endl;
+      // readCount = clientSocket.WrappedRead(buf, 2047);
+      // buf[readCount] = '\0';
+      // cout << "i got '" << buf << "'" << endl;
+
+
+      int bye = 0;
+      while (bye == 0){
+
+        readCount = clientSocket.WrappedRead(buf, 2047);
+        buf[readCount] = '\0';
+
+        if (readCount > 10){
+          bye = 1;
+          cout << "i got '" << buf << "'" << endl;
+        }     
       }
-      newClientSocket.WrappedWrite(fakeupdate.c_str(), fakeupdate.length());
-}
-cout<< "left while loop" << endl;
-
-
-
-// cout << "i'm waiting for a write in activate, should show after after server counting down---------------------" << endl;
-// readCount = clientSocket.WrappedRead(buf, 2047);
-// buf[readCount] = '\0';
-// cout << "i read '" << buf << "'" << endl;
-
-// //clientSocket.WrappedWrite(helloack_message,2047);
-
-// cout << "i'm waiting for a write---------------------" << endl;
-// readCount = clientSocket.WrappedRead(buf, 2047);
-// buf[readCount] = '\0';
-// cout << "i read '" << buf << "'" << endl;
-
+      //while ()
 
   } catch(string errString) {
     cerr << errString << endl;
