@@ -94,17 +94,17 @@ cout<< "left while loop" << endl;
 
 
 
-cout << "i'm waiting for a write in activate, should show after after server counting down---------------------" << endl;
-readCount = clientSocket.WrappedRead(buf, 2047);
-buf[readCount] = '\0';
-cout << "i read '" << buf << "'" << endl;
+// cout << "i'm waiting for a write in activate, should show after after server counting down---------------------" << endl;
+// readCount = clientSocket.WrappedRead(buf, 2047);
+// buf[readCount] = '\0';
+// cout << "i read '" << buf << "'" << endl;
 
-//clientSocket.WrappedWrite(helloack_message,2047);
+// //clientSocket.WrappedWrite(helloack_message,2047);
 
-cout << "i'm waiting for a write---------------------" << endl;
-readCount = clientSocket.WrappedRead(buf, 2047);
-buf[readCount] = '\0';
-cout << "i read '" << buf << "'" << endl;
+// cout << "i'm waiting for a write---------------------" << endl;
+// readCount = clientSocket.WrappedRead(buf, 2047);
+// buf[readCount] = '\0';
+// cout << "i read '" << buf << "'" << endl;
 
 
   } catch(string errString) {

@@ -213,9 +213,10 @@ void view_construct_grid(){
    //encode to json object
    json_t* message_json = json_loads(buff, JSON_COMPACT, NULL);  //remeber to json_decref()
    json_t* gameinstance_json = json_object_get(message_json, "gameinstance");
-   json_t* gamestate_json = json_object_get(gameinstance_json, "gamestate");
-   json_t* boardcandies_json = json_object_get(gamestate_json, "boardcandies");
-   json_t* boardstate_json = json_object_get(gamestate_json, "boardstate");
+    json_t* gamedef_json = json_object_get(gameinstance_json, "gamedef");
+    json_t* gamestate_json = json_object_get(gameinstance_json, "gamestate");
+      json_t* boardstate_json = json_object_get(gamestate_json, "boardstate");
+      json_t* boardcandies_json = json_object_get(gamestate_json, "boardcandies");
 
        // json_t* rows_json = json_object_get(boardcandies_json, "rows");
        // json_t* cols_json = json_object_get(boardcandies_json, "cols");
@@ -225,23 +226,25 @@ void view_construct_grid(){
 
 
    json_t* boardcandies_data_json = json_object_get(boardcandies_json, "data");
+   json_t* boardstate_data_json = json_object_get(boardstate_json, "data");
+
    cout<< "checking decoding gameinstance, boardcandies_data size should be 36 -------output: " << json_array_size(boardcandies_data_json)<< endl;
    for (int row = 0; row < rows; row++){
     for (int col = 0; col < cols; col++){
       int curr = row * rows + col;
       json_t* candy = json_array_get(boardcandies_data_json, curr);
       int color = json_integer_value(json_object_get(candy, "color"));
-      int type = json_integer_value(json_object_get(candy, "type"));
-
-      view_create_candy(color, type, row, col);
+      int state = json_integer_value(json_array_get(boardstate_data_json, curr));
+      
+      view_create_candy(color, state, row, col);
     }
    }
-
+   int movesallowed = json_integer_value(json_object_get(gamedef_json, "movesallowed"));
    int movesmade = json_integer_value(json_object_get(gamestate_json, "movesmade"));
    int score = json_integer_value(json_object_get(gamestate_json, "currentscore"));
    //draw score and moves label
    moves_label = gtk_label_new (NULL);
-   view_update_moves_label(movesmade);
+   view_update_moves_label(movesallowed - movesmade);
    gtk_grid_attach (GTK_GRID (grid), moves_label, cols, 4, 1, 1);
 
    score_label = gtk_label_new(NULL);
