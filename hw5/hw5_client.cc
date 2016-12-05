@@ -92,10 +92,10 @@ int main(int argc, char *argv[]) {
 // }
 // cout<< "left while loop" << endl;
 
-      // cout << "i'm waiting for a write ---------------------" << endl;
-      // readCount = clientSocket.WrappedRead(buf, 2047);
-      // buf[readCount] = '\0';
-      // cout << "i got '" << buf << "'" << endl;
+      cout << "i'm waiting for a write ---------------------" << endl;
+      readCount = clientSocket.WrappedRead(buf, 2047);
+      buf[readCount] = '\0';
+      cout << "i got '" << buf << "'" << endl;
 
 
       // cout << "i'm waiting for a write ---------------------" << endl;

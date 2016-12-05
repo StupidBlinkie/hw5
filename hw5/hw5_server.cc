@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <memory>
 
 #include "ServerSocket.h"
 #include "ClientSocket.h"
@@ -32,21 +33,23 @@ GtkWidget *window;
 GtkWidget *moves_label;
 GtkWidget *score_label;
 
-void* peerSocket_ptr;
-// hw5_net::ClientSocket&  peerSocket_ref;
 
 void dosomething(gpointer user_data){
 
  //if selected candy, generate a move message and send to client
-
+cout << "in dosomething, user_data (peerSocket_ptr address) is " << user_data << endl;
   if (selected_candy_bool == 1){
+        std::shared_ptr<hw5_net::ClientSocket> peerSocket_ptr =  
+      *(std::shared_ptr<hw5_net::ClientSocket>*)user_data;
 
-      hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)user_data;
+      cout << "in dosomething, user_data (peerSocket_ptr address) is " << user_data << endl;
+      //cout << "in dosomething, socket address is " << &(*peerSocket_ptr)<< endl;
+      //hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)user_data;
       //hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)peerSocket_ptr;
       cout << "(inside dosomething---) about to send an action to client" << endl;
       cout << "in dosomething, user_data is " << user_data << endl;
       //cout << "in dosomething, peerSocket address is " << &peerSocket << endl;
-      peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
+      //(*peerSocket_ptr).WrappedWrite(fakemove.c_str(), fakemove.length());
       cout << "(inside dosomething---) I just sent an action" << endl;
   }else{
     cout<< "please select a candy !" << endl;
@@ -118,20 +121,21 @@ int main(int argc, char *argv[]) {
 	 << "\tserverDNSName\t" << serverDNSName << endl;
 
     // wrap connection to peer with a CientSocket
-    hw5_net::ClientSocket peerSocket(acceptedFd);
+    //hw5_net::ClientSocket peerSocket(acceptedFd);
 
+
+    std::shared_ptr<hw5_net::ClientSocket> 
+                  peerSocket_ptr (new hw5_net::ClientSocket(acceptedFd));
+    cout << "in main, shared_ptr address is " << &peerSocket_ptr << endl;
     cout << "Reading" << endl;
 
     char buf[2048];
     int readCount;
-    //bool received_hello = false;
     bool said_hello = 0;
-
-
     //keep reading until gets hello
     while (said_hello == 0) {
       // write to stdout
-      readCount = peerSocket.WrappedRead(buf, 2047); //waits for client to write hello
+      readCount = (*peerSocket_ptr).WrappedRead(buf, 2047); //waits for client to write hello
       buf[readCount] = '\0'; // make sure buf holds a c style string
       cout << "Got '" << buf << "'" << endl;
 
@@ -149,18 +153,20 @@ int main(int argc, char *argv[]) {
         match_hello = 0;
 
         char* helloack_message = generate_helloack_message(argv[1]);
-        peerSocket.WrappedWrite(helloack_message, 2047);  //TO-DO: not safe here if gameboard is large, convert to string then use str.length()?
+        (*peerSocket_ptr).WrappedWrite(helloack_message, 2047);  //TO-DO: not safe here if gameboard is large, convert to string then use str.length()?
       } 
       
     } //end of while }
+
+    //(*peerSocket_ptr).WrappedWrite(fakemove.c_str(), 2047);
 
    cout << "in main, gtk check point 1" << endl;
    GtkApplication *app;
    int status;
    app = gtk_application_new ("candy.crush", G_APPLICATION_FLAGS_NONE);
-   cout << "in main, user_data is " << &peerSocket << endl;
-   g_signal_connect (app, "activate", G_CALLBACK(activate), (gpointer) &peerSocket);
-      cout << "in main, gtk check point 1.5" << endl;
+   cout << "in main, user_data (peerSocket_ptr address) is " << &peerSocket_ptr << endl;
+  //cout << " in main socket address is " << &(*peerSocket_ptr)<< endl;
+   g_signal_connect (app, "activate", G_CALLBACK(activate), (gpointer) &peerSocket_ptr);
    status = g_application_run (G_APPLICATION (app), 0, argv);
       cout << "in main, gtk check point 2" << endl;
  
@@ -208,13 +214,18 @@ void view_destroy_grid() {
 }
 //also constructes move and score labels
 void view_construct_grid( gpointer user_data ){
+
    cout << "in view_construct_grid, user_data is " << user_data << endl;
-   hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)user_data;
+   //cout << "(inside construct grid---) socket address is " << &(*peerSocket_ptr)<< endl;
+   //hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)user_data;
+
+    std::shared_ptr<hw5_net::ClientSocket> peerSocket_ptr =  
+      *(std::shared_ptr<hw5_net::ClientSocket>*)user_data;
 
    //reterive update message
    int readCount1 = 0;
    char buff[2048];
-   readCount1 = peerSocket.WrappedRead(buff, 2047);
+   readCount1 = (*peerSocket_ptr).WrappedRead(buff, 2047);
    cout << "Read update >>>>" << buff  << endl << endl;
    buff[readCount1] = '\0'; // make sure buf holds a c style string
    
@@ -262,8 +273,8 @@ void view_construct_grid( gpointer user_data ){
 
    cout << "(inside construct grid---) before write" << endl;
    //peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
+   (*peerSocket_ptr). WrappedWrite(fakemove.c_str(), fakemove.length());
    cout << "(inside construct grid---) after write" << endl;
-
    //socket gets deleted after this
 }
 
