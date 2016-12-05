@@ -182,20 +182,20 @@ void applyGravity() {
          
    // all -1s should be on top. all left over candies should be on bottom
    // put candies fro extension board in -1 candies;
-      cout << "column:   " << col << endl;
+      //cout << "column:   " << col << endl;
       if (foundFired) {
          for (int row = lowestFiredRow; row < g_state->get_rows(); row++) {
             int offset = g_state->get_extensionOffset(col) % g_def->get_extensionColor_rows();
-            cout << "offset:   " << offset << endl;
+            //cout << "offset:   " << offset << endl;
             int newColor = *(int*)g_def->get_extensionColor_element(offset, col);
-            cout << "new color:    " << newColor << endl;
+            //cout << "new color:    " << newColor << endl;
             g_state->set_candy_color(row, col, newColor);
             int newOffset = g_state->get_extensionOffset(col) + 1;
             g_state->set_extensionOffset(col, newOffset);
             newOffset = g_state->get_extensionOffset(col) % g_def->get_extensionColor_rows();
-            cout << "new offset:    " << newOffset << endl;
+            //cout << "new offset:    " << newOffset << endl;
          }
-         cout << endl << endl << endl;
+         //cout << endl << endl << endl;
       }
    }
 }

@@ -237,15 +237,12 @@ inline void gameState::initialize(gameDef* &g_def, json_t *gamestate_json){
 	cout << "starting initialize" << endl;
 	rows = g_def->get_boardState_rows();
 	cols = g_def->get_boardState_cols();
-cout << "starting initialize" << endl;
 
 	extensionOffset = (int*)malloc(rows * sizeof(int));
 	internal_boardCandies = (candy**)malloc(rows * cols * sizeof(candy*));
 	internal_boardState= (int*)malloc(rows * cols * sizeof(int));
 	boardCandies = A2d_AllocateArray2d(rows, cols, sizeof(void*));
 	boardState = A2d_AllocateArray2d(rows, cols, sizeof(void*));
-   
-   cout << "check point 1 " << endl;
 
 	if (gamestate_json == NULL) {
 	   for (int i = 0; i < cols; i++) {
@@ -263,7 +260,7 @@ cout << "starting initialize" << endl;
 			  //cout << "[gameState initialize]-- internal candy array.. type & color ---" << internal_boardCandies[ r * cols + c]->get_type() << " "<< internal_boardCandies[ r * cols + c]->get_color() << endl;
 			}
 		}	
-		cout << "check point 2" << endl;	
+	
 	} 	
 	else {
 		json_t *candy_json = json_object_get(gamestate_json, "boardcandies");
@@ -301,7 +298,7 @@ cout << "starting initialize" << endl;
 	       A2d_FillArray2d(boardState, r, c, &internal_boardState[r * cols + c]);
 		}
 	}
-	cout << "check point 3" << endl;
+	
 }
 
 //destructor
@@ -330,7 +327,7 @@ inline gameState::~gameState(void){
 void model_initialize(char* file);
 void deserialize2dArray(json_t *json, bool reading_first_array);
 void deserialize(json_t* file);
-void serialize();
+char* serialize();
 bool applyTemplate();
 bool VFour();
 bool HFour();

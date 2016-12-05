@@ -22,11 +22,12 @@ const char* color_state0_files[7] = {"../images/regular/state0/blue.png", "../im
                               "../images/regular/state0/nocolor.png"};
 long selected_row;
 long selected_col;
+long selected_dir;
 int selected_candy_bool = 0;
 int rows, cols;
 
 string fakemove = "{\"action\": \"move\"}";
-
+std::shared_ptr<hw5_net::ClientSocket> peerSocket_ptr;
 
 GtkWidget *grid;
 GtkWidget *window;
@@ -34,53 +35,49 @@ GtkWidget *moves_label;
 GtkWidget *score_label;
 
 
-void dosomething(gpointer user_data){
 
- //if selected candy, generate a move message and send to client
-cout << "in dosomething, user_data (peerSocket_ptr address) is " << user_data << endl;
-  if (selected_candy_bool == 1){
-        std::shared_ptr<hw5_net::ClientSocket> peerSocket_ptr =  
-      *(std::shared_ptr<hw5_net::ClientSocket>*)user_data;
 
-      cout << "in dosomething, user_data (peerSocket_ptr address) is " << user_data << endl;
-      //cout << "in dosomething, socket address is " << &(*peerSocket_ptr)<< endl;
-      //hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)user_data;
-      //hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)peerSocket_ptr;
-      cout << "(inside dosomething---) about to send an action to client" << endl;
-      cout << "in dosomething, user_data is " << user_data << endl;
-      //cout << "in dosomething, peerSocket address is " << &peerSocket << endl;
-      //(*peerSocket_ptr).WrappedWrite(fakemove.c_str(), fakemove.length());
-      cout << "(inside dosomething---) I just sent an action" << endl;
-  }else{
-    cout<< "please select a candy !" << endl;
-  }
-}
 
 
 void activate (GtkApplication *app, gpointer user_data) {
-cout << "in activate, user_data is " << user_data << endl;
-//hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)user_data; 
-//(*(hw5_net::ClientSocket *)user_data).WrappedWrite(fakemove.c_str(), fakemove.length());
+   cout << "in activate, user_data is " << user_data << endl;
+    // std::shared_ptr<hw5_net::ClientSocket> peerSocket_ptr =  
+    //   *(std::shared_ptr<hw5_net::ClientSocket>*)user_data;
+
 
    window = gtk_application_window_new (app);
    gtk_window_set_title (GTK_WINDOW (window), "Window");
-   gtk_window_set_default_size (GTK_WINDOW (window), 40*6, 40*6);
+   gtk_window_set_default_size (GTK_WINDOW (window), 40* 6, 40* 6);
    gtk_container_set_border_width (GTK_CONTAINER (window), 10);
    grid = gtk_grid_new();
    gtk_container_add (GTK_CONTAINER (window), grid);
 
-cout << "(inside activate---) 1" << endl;
-   GtkButton *button;
-   view_construct_grid(user_data);
+   
+   view_construct_grid();
 
-cout << "(inside activate---after view_construct_grid)" << endl;
+   GtkButton *button;
    button = (GtkButton*) gtk_button_new_with_label (NULL);
    gtk_button_set_image(button, gtk_image_new_from_file ("../images/direction/up.png"));
-   g_signal_connect (button, "clicked", G_CALLBACK (dosomething), user_data);
-   gtk_grid_attach (GTK_GRID (grid), (GtkWidget*) button, cols, 0, 1, 1); // need to fix these parameters
-cout << "(inside activate---) 3" << endl;
+   g_signal_connect (button, "clicked", G_CALLBACK (clicked_up), NULL);
+   gtk_grid_attach (GTK_GRID (grid), (GtkWidget*) button, cols, 0, 1, 1);
+
+      button = (GtkButton*) gtk_button_new_with_label (NULL);
+   gtk_button_set_image(button, gtk_image_new_from_file ("../images/direction/down.png"));
+   g_signal_connect (button, "clicked", G_CALLBACK (clicked_down), NULL);
+   gtk_grid_attach (GTK_GRID (grid), (GtkWidget*) button, cols, 1, 1, 1);
+
+      button = (GtkButton*) gtk_button_new_with_label (NULL);
+   gtk_button_set_image(button, gtk_image_new_from_file ("../images/direction/left.png"));
+   g_signal_connect (button, "clicked", G_CALLBACK (clicked_left), NULL);
+   gtk_grid_attach (GTK_GRID (grid), (GtkWidget*) button, cols, 2, 1, 1);
+
+      button = (GtkButton*) gtk_button_new_with_label (NULL);
+   gtk_button_set_image(button, gtk_image_new_from_file ("../images/direction/right.png"));
+   g_signal_connect (button, "clicked", G_CALLBACK (clicked_right), NULL);
+   gtk_grid_attach (GTK_GRID (grid), (GtkWidget*) button, cols, 3, 1, 1);
+
    gtk_widget_show_all (window);
-   cout << "(inside activate---) end of activate" << endl;
+
 }
 
 
@@ -124,8 +121,10 @@ int main(int argc, char *argv[]) {
     //hw5_net::ClientSocket peerSocket(acceptedFd);
 
 
-    std::shared_ptr<hw5_net::ClientSocket> 
-                  peerSocket_ptr (new hw5_net::ClientSocket(acceptedFd));
+    // std::shared_ptr<hw5_net::ClientSocket> 
+    //               peerSocket_ptr (new hw5_net::ClientSocket(acceptedFd));
+
+   peerSocket_ptr =   std::shared_ptr<hw5_net::ClientSocket>  (new hw5_net::ClientSocket(acceptedFd));
     cout << "in main, shared_ptr address is " << &peerSocket_ptr << endl;
     cout << "Reading" << endl;
 
@@ -203,7 +202,7 @@ char* generate_helloack_message(char* file){
 
 void view_redraw_grid() {
    view_destroy_grid();
-   //view_construct_grid();
+   view_construct_grid();
 }
 void view_destroy_grid() {
    for (int row = 0; row < rows; row++) {
@@ -213,14 +212,14 @@ void view_destroy_grid() {
    }
 }
 //also constructes move and score labels
-void view_construct_grid( gpointer user_data ){
+void view_construct_grid(){
 
-   cout << "in view_construct_grid, user_data is " << user_data << endl;
+
    //cout << "(inside construct grid---) socket address is " << &(*peerSocket_ptr)<< endl;
    //hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)user_data;
 
-    std::shared_ptr<hw5_net::ClientSocket> peerSocket_ptr =  
-      *(std::shared_ptr<hw5_net::ClientSocket>*)user_data;
+    // std::shared_ptr<hw5_net::ClientSocket> peerSocket_ptr =  
+    //   *(std::shared_ptr<hw5_net::ClientSocket>*)user_data;
 
    //reterive update message
    int readCount1 = 0;
@@ -271,10 +270,10 @@ void view_construct_grid( gpointer user_data ){
    gtk_grid_attach (GTK_GRID (grid), score_label, cols, 5, 1, 1);
 
 
-   cout << "(inside construct grid---) before write" << endl;
+   //cout << "(inside construct grid---) before write" << endl;
    //peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
-   (*peerSocket_ptr). WrappedWrite(fakemove.c_str(), fakemove.length());
-   cout << "(inside construct grid---) after write" << endl;
+   //(*peerSocket_ptr). WrappedWrite(fakemove.c_str(), fakemove.length());
+   //cout << "(inside construct grid---) after write" << endl;
    //socket gets deleted after this
 }
 
@@ -335,3 +334,87 @@ void set_col(GtkWidget *widget, gpointer data) {
    selected_candy_bool = 1;
    cout<< "selected row , col = " << selected_row << ", " << selected_col << endl;
 }
+
+
+
+void clicked_up(){
+  if (selected_candy_bool == 1){
+    json_t* json_final = json_object();
+    json_object_set(json_final, "action", json_string("update"));
+    json_object_set(json_final, "row", json_integer(selected_row));
+    json_object_set(json_final, "col", json_integer(selected_col));
+    json_object_set(json_final, "direction", json_integer(2));
+    char* updateMessage = json_dumps(json_final, NULL); 
+    cout << "sending >>> "<< updateMessage << endl;
+    (*peerSocket_ptr).WrappedWrite(updateMessage, 2048);
+    view_redraw_grid();
+  }
+  else{
+    cout<< "please select a candy !" << endl;
+  }
+}
+
+void clicked_down(){
+  if (selected_candy_bool == 1){
+    json_t* json_final = json_object();
+    json_object_set(json_final, "action", json_string("update"));
+    json_object_set(json_final, "row", json_integer(selected_row));
+    json_object_set(json_final, "col", json_integer(selected_col));
+    json_object_set(json_final, "direction", json_integer(3));
+    char* updateMessage = json_dumps(json_final, NULL); 
+    cout << "sending >>> "<< updateMessage << endl;
+    (*peerSocket_ptr).WrappedWrite(updateMessage, 2048);
+    view_redraw_grid();
+  }
+  else{
+    cout<< "please select a candy !" << endl;
+  }
+}
+
+void clicked_left(){
+  if (selected_candy_bool == 1){
+    json_t* json_final = json_object();
+    json_object_set(json_final, "action", json_string("update"));
+    json_object_set(json_final, "row", json_integer(selected_row));
+    json_object_set(json_final, "col", json_integer(selected_col));
+    json_object_set(json_final, "direction", json_integer(0));
+    char* updateMessage = json_dumps(json_final, NULL); 
+    cout << "sending >>> "<< updateMessage << endl;
+    (*peerSocket_ptr).WrappedWrite(updateMessage, 2048);
+    view_redraw_grid();
+  }
+  else{
+    cout<< "please select a candy !" << endl;
+  }
+}
+
+void clicked_right(){
+  if (selected_candy_bool == 1){
+    json_t* json_final = json_object();
+    json_object_set(json_final, "action", json_string("update"));
+    json_object_set(json_final, "row", json_integer(selected_row));
+    json_object_set(json_final, "col", json_integer(selected_col));
+    json_object_set(json_final, "direction", json_integer(1));
+    char* updateMessage = json_dumps(json_final, NULL); 
+    cout << "sending >>> "<< updateMessage << endl;
+    (*peerSocket_ptr).WrappedWrite(updateMessage, 2048);
+    view_redraw_grid();
+  }
+  else{
+    cout<< "please select a candy !" << endl;
+  }
+}
+
+// void dosomething(gpointer user_data){
+
+//  //if selected candy, generate a move message and send to client
+//   cout << "in dosomething, user_data (peerSocket_ptr address) is " << &peerSocket_ptr << endl;
+//   if (selected_candy_bool == 1){
+//       cout << "in dosomething, user_data (peerSocket_ptr address) is " << user_data << endl;
+//       cout << "(inside dosomething---) about to send an action to client" << endl;
+//       (*peerSocket_ptr).WrappedWrite(fakemove.c_str(), fakemove.length());
+//       cout << "(inside dosomething---) I just sent an action" << endl;
+//   }else{
+//     cout<< "please select a candy !" << endl;
+//   }
+// }

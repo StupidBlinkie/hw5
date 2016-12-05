@@ -73,53 +73,55 @@ int main(int argc, char *argv[]) {
     cout << "-------last line before while loop, sent serialized data---------------------" << endl;
 
 
-// at this point, if server has a write, read will wait for that write,
-// but the second read won't. since there's no more write unless click a button
-// how to make it wait for non-occured write in server???? (the ones from  user actions functions)
 
-// int bye = 0;
-// while (bye == 0){
-//       hw5_net::ClientSocket newClientSocket(serverName, serverPort);
-//       cout << "i'm waiting for a write in activate---------------------" << endl;
-//       readCount = newClientSocket.WrappedRead(buf, 2047);
-//       char buf[2048];
-//       buf[readCount] = '\0';
-//       cout << "i got '" << buf << "'" << endl;
-//       if(readCount > 10){
-//         bye = 1;
-//       }
-//       newClientSocket.WrappedWrite(fakeupdate.c_str(), fakeupdate.length());
-// }
-// cout<< "left while loop" << endl;
 
-      cout << "i'm waiting for a write ---------------------" << endl;
+
+//buggy..
+
+    int bye = 0;
+    while (bye == 0){
       readCount = clientSocket.WrappedRead(buf, 2047);
       buf[readCount] = '\0';
-      cout << "i got '" << buf << "'" << endl;
 
+      //decode update message
+      json_t* message_json = json_loads(buf, JSON_COMPACT, NULL);
+      json_t* action_json = json_object_get(message_json, "action");
+      const char* action = json_string_value(action_json);
+        cout << action << (action == "update") << (action == "bye") << endl;
 
-      // cout << "i'm waiting for a write ---------------------" << endl;
-      // readCount = clientSocket.WrappedRead(buf, 2047);
-      // buf[readCount] = '\0';
-      // cout << "i got '" << buf << "'" << endl;
+      int row = json_integer_value(json_object_get(message_json, "row"));
+      int col = json_integer_value(json_object_get(message_json, "col"));
+      int dir = json_integer_value(json_object_get(message_json, "direction"));
 
-      // cout << "i'm waiting for a write ---------------------" << endl;
-      // readCount = clientSocket.WrappedRead(buf, 2047);
-      // buf[readCount] = '\0';
-      // cout << "i got '" << buf << "'" << endl;
-
-
-      int bye = 0;
-      while (bye == 0){
-
-        readCount = clientSocket.WrappedRead(buf, 2047);
-        buf[readCount] = '\0';
-
-        if (readCount > 10){
-          bye = 1;
-          cout << "i got '" << buf << "'" << endl;
-        }     
+      if (dir == 0){
+        g_state->swap_candy_elements(row, col, row -1 , col); 
+        if (!applyTemplate()) {g_state->swap_candy_elements(row -1 , col, row , col); }
       }
+      else if (dir == 1){
+        g_state->swap_candy_elements(row, col, row +1 , col);
+        if (!applyTemplate()) {g_state->swap_candy_elements(row +1 , col, row , col); }
+      }
+      else if (dir == 2){
+        g_state->swap_candy_elements(row, col, row , col + 1);
+        if (!applyTemplate()) {g_state->swap_candy_elements(row , col+1, row , col); }
+      }
+      else if (dir == 3){
+        g_state->swap_candy_elements(row, col, row , col-1);
+        if (!applyTemplate()) {g_state->swap_candy_elements(row , col-1, row , col); }
+      }
+      else{
+        cout << "invalid direction received" << endl;
+      }
+
+      char* update_message = serialize();
+      clientSocket.WrappedWrite(update_message,2047);
+
+
+      // if (){
+      //   bye = 1;
+      //   cout << "i got bye'" << "'" << endl;
+      // }     
+    }
       //while ()
 
   } catch(string errString) {
