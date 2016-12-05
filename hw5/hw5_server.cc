@@ -39,6 +39,23 @@ void dosomething(gpointer user_data){
    // cout << "(inside activate---) sending an action to client" << endl;
 }
 
+
+void view_construct_grid(hw5_net::ClientSocket peerSocket){
+   int readCount1 = 0;
+   char buff[2048];
+   readCount1 = peerSocket.WrappedRead(buff, 2047);  //waits for after_helloack_message
+   cout << "Read update >>>>" << buff  << endl;
+   buff[readCount1] = '\0'; // make sure buf holds a c style string
+       double timing = 350000;
+    while (timing > 0){
+      timing --;
+      cout<< timing << endl;
+    }
+   //peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
+   //writes to the same buf in client
+}
+
+
 void activate (GtkApplication *app, gpointer user_data) {
 
    hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)user_data;
@@ -50,13 +67,13 @@ void activate (GtkApplication *app, gpointer user_data) {
     //char buf[2048];
     //readCount = peerSocket.WrappedRead(buf, 2047);  //waits for after_helloack_message
     
-    double timing = 350000;
-    while (timing > 0){
-      timing --;
-      cout<< timing << endl;
-    }
-    cout << "(inside activate---) end of activate" << endl;
-    peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
+    // double timing = 350000;
+    // while (timing > 0){
+    //   timing --;
+    //   cout<< timing << endl;
+    // }
+
+    //peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
 
    // buf[readCount] = '\0'; // make sure buf holds a c style string
    // cout << "(inside activate---)" << buf << "'" << endl;
@@ -72,7 +89,7 @@ void activate (GtkApplication *app, gpointer user_data) {
 
 
    GtkButton *button;
-   //view_construct_grid();
+   view_construct_grid(peerSocket);
    
 
    //four control buttons + 1 quit button
@@ -137,7 +154,6 @@ int main(int argc, char *argv[]) {
 
     // wrap connection to peer with a CientSocket
     hw5_net::ClientSocket peerSocket(acceptedFd);
-    void* peer_sock = &peerSocket;
 
     cout << "in main, peerSocket address is " << &peerSocket << endl;
 
@@ -183,11 +199,11 @@ int main(int argc, char *argv[]) {
     } //end of while }
 
 
-   int readCount1 = 0;
-   char buff[2048];
-   readCount1 = peerSocket.WrappedRead(buff, 2047);  //waits for after_helloack_message
-   cout << "Read helloack >>>>" << buff  << endl;
-   buf[readCount] = '\0'; // make sure buf holds a c style string
+   // int readCount1 = 0;
+   // char buff[2048];
+   // readCount1 = peerSocket.WrappedRead(buff, 2047);  //waits for after_helloack_message
+   // cout << "Read helloack >>>>" << buff  << endl;
+   // buf[readCount] = '\0'; // make sure buf holds a c style string
 
    cout << "in main, gtk check point 1" << endl;
    GtkApplication *app;

@@ -47,12 +47,8 @@ int main(int argc, char *argv[]) {
   try {
     string serverName(argv[1]);
     hw5_net::ClientSocket clientSocket(serverName, serverPort);
+    
     char buf[2048];
-    //     double timing = 350000;
-    // while (timing > 0){
-    //   timing --;
-    //   cout<< timing << endl;
-    // }
     clientSocket.WrappedWrite(Message_hello.c_str(), Message_hello.length());   
 
     int readCount = clientSocket.WrappedRead(buf, 2047);  //waits for server write helloack
@@ -70,15 +66,8 @@ int main(int argc, char *argv[]) {
     //load gamestate apply template compute new g_state
     applyTemplate();
 
-
     //serialize new game_state
     char* helloack_message = serialize();
-
-// double timing = 350000;
-//     while (timing > 0){
-//       timing --;
-//       cout<< timing << endl;
-//     }
     clientSocket.WrappedWrite(helloack_message,2047);
 
     cout << "last line before while loop --------sent serialized data---------------------" << endl;
@@ -88,6 +77,22 @@ int main(int argc, char *argv[]) {
 // but the second read won't. since there's no more write unless click a button
 // how to make it wait for non-occured write in server???? (the ones from  user actions functions)
 
+int bye = 0;
+while (bye == 0){
+      hw5_net::ClientSocket newClientSocket(serverName, serverPort);
+      cout << "i'm waiting for a write in activate---------------------" << endl;
+      readCount = newClientSocket.WrappedRead(buf, 2047);
+      char buf[2048];
+      buf[readCount] = '\0';
+      cout << "i got '" << buf << "'" << endl;
+      if(readCount > 10){
+        bye = 1;
+      }
+      newClientSocket.WrappedWrite(fakeupdate.c_str(), fakeupdate.length());
+}
+cout<< "left while loop" << endl;
+
+
 
 cout << "i'm waiting for a write in activate, should show after after server counting down---------------------" << endl;
 readCount = clientSocket.WrappedRead(buf, 2047);
@@ -95,11 +100,6 @@ buf[readCount] = '\0';
 cout << "i read '" << buf << "'" << endl;
 
 //clientSocket.WrappedWrite(helloack_message,2047);
-
-cout << "i'm waiting for a write---------------------" << endl;
-readCount = clientSocket.WrappedRead(buf, 2047);
-buf[readCount] = '\0';
-cout << "i read '" << buf << "'" << endl;
 
 cout << "i'm waiting for a write---------------------" << endl;
 readCount = clientSocket.WrappedRead(buf, 2047);
@@ -477,7 +477,7 @@ char* serialize(){
   json_object_set(obj, "gamestate", gamestate);
 
   json_t* json_final = json_object();
-  json_object_set(json_final, "action", json_string("helloack"));
+  json_object_set(json_final, "action", json_string("update"));
   json_object_set(json_final, "gameinstance", obj);
 
 
