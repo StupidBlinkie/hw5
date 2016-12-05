@@ -82,7 +82,9 @@ int main(int argc, char *argv[]) {
     while (bye == 0){
       readCount = clientSocket.WrappedRead(buf, 2047);
       buf[readCount] = '\0';
-
+      if(readCount > 1){   //read count is 1 if read ''
+        cout<< "got" << buf << "readcount is " << readCount << endl;
+      
       //decode update message
       json_t* message_json = json_loads(buf, JSON_COMPACT, NULL);
       json_t* action_json = json_object_get(message_json, "action");
@@ -115,7 +117,7 @@ int main(int argc, char *argv[]) {
 
       char* update_message = serialize();
       clientSocket.WrappedWrite(update_message,2047);
-
+    }
 
       // if (){
       //   bye = 1;

@@ -213,14 +213,6 @@ void view_destroy_grid() {
 }
 //also constructes move and score labels
 void view_construct_grid(){
-
-
-   //cout << "(inside construct grid---) socket address is " << &(*peerSocket_ptr)<< endl;
-   //hw5_net::ClientSocket peerSocket = *(hw5_net::ClientSocket *)user_data;
-
-    // std::shared_ptr<hw5_net::ClientSocket> peerSocket_ptr =  
-    //   *(std::shared_ptr<hw5_net::ClientSocket>*)user_data;
-
    //reterive update message
    int readCount1 = 0;
    char buff[2048];
@@ -268,11 +260,6 @@ void view_construct_grid(){
    score_label = gtk_label_new(NULL);
    view_update_score_label(score);
    gtk_grid_attach (GTK_GRID (grid), score_label, cols, 5, 1, 1);
-
-
-   //cout << "(inside construct grid---) before write" << endl;
-   //peerSocket.WrappedWrite(fakemove.c_str(), fakemove.length());
-   //(*peerSocket_ptr). WrappedWrite(fakemove.c_str(), fakemove.length());
    //cout << "(inside construct grid---) after write" << endl;
    //socket gets deleted after this
 }
